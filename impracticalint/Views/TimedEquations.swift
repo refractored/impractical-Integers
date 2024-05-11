@@ -23,7 +23,6 @@ struct TimedEquations: View {
     @State var timer = -1
     @State var currentInfo = equationInfo(terms: [Int](), answer: 0, displayText: "")
     @State var popupPresented = false
-//    @AppStorage("correct") private var timedHighScore = -1
     @AppStorage("easyHighScore") private var easyHighScore = -1
     @AppStorage("normalHighScore") private var normalHighScore = -1
     @AppStorage("hardHighScore") private var hardHighScore = -1
@@ -33,6 +32,15 @@ struct TimedEquations: View {
     let endSoundEffect: SystemSoundID = 1112
     let startSoundEffect: SystemSoundID = 1110
 
+    private func startGame(){
+        answer = ""
+        AudioServicesPlaySystemSound(startSoundEffect)
+        equations = true
+        sessionScore = 0
+        currentInfo = equationShuffle(termCount: Int(sliderValue))
+        timeRemaining = 60
+    }
+    
     private func endGame(animated: Bool){
         answer = ""
         AudioServicesPlaySystemSound(endSoundEffect)
@@ -44,38 +52,29 @@ struct TimedEquations: View {
             equations = false
         }
         
-
-        if sliderValue == 2.0{
-            if sessionScore > easyHighScore{
+        switch sliderValue{
+        case 2.0:
+            if (sessionScore > easyHighScore && sessionScore != 0){
                 easyHighScore = sessionScore
                 sessionScore = 0
                 popupPresented = true
             }
-        }
-        if sliderValue == 3.0{
-            if sessionScore > normalHighScore{
+        case 3.0:
+            if (sessionScore > normalHighScore && sessionScore != 0){
                 normalHighScore = sessionScore
                 sessionScore = 0
                 popupPresented = true
             }
-        }
-        if sliderValue == 4.0{
-            if sessionScore > hardHighScore{
+        case 4.0:
+            if (sessionScore > hardHighScore && sessionScore != 0){
                 hardHighScore = sessionScore
                 sessionScore = 0
                 popupPresented = true
             }
+        default: return
         }
+
         
-    }
-    
-    private func startGame(){
-        answer = ""
-        AudioServicesPlaySystemSound(startSoundEffect)
-        equations = true
-        sessionScore = 0
-        currentInfo = equationShuffle(termCount: Int(sliderValue))
-        timeRemaining = 60
     }
     
     var body: some View {
@@ -148,56 +147,55 @@ private struct GameScreen: View{
     
     var body: some View{
         ZStack{
-
-        VStack{
-            Image(systemName: "clock.fill")
-                .imageScale(.large)
-                .foregroundColor(buttonBackground)
-            Text(String(timeRemaining))
-                .font(.largeTitle)
-                .fontWeight(.heavy)
-                .onReceive(countdown) { _ in
-                    if timeRemaining > 0 {
-                        timeRemaining -= 1
-                    } else {
-                        self.endGame()
-                    }
-                }
             
-            AnimatedCheckmarkView(isAnimating: $shouldAnimateCheckmark)
-            Text(currentInfo.displayText)
-            TextField("Answer", text: $answer)
-                .frame(width: 180	)
-                .font(.headline)
-                .fontWeight(.heavy)
-                .modifier(jiggleEffect(animatableData: CGFloat(attempts)))
-                .multilineTextAlignment(.center)
-                .buttonStyle(.borderedProminent)
-                .tint(buttonBackground)
-                .onChange(of: answer) { newValue in
-                    if let userAnswer = Int(newValue),
-                       userAnswer == currentInfo.answer {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                            AudioServicesPlaySystemSound(systemSoundID)
-                            shouldAnimateCheckmark = true
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                shouldAnimateCheckmark = false
-                            }
-                            sessionScore += 1
-                            currentInfo = equationShuffle(termCount: Int(sliderValue))
-                            answer = ""
+            VStack{
+                Image(systemName: "clock.fill")
+                    .imageScale(.large)
+                    .foregroundColor(buttonBackground)
+                Text(String(timeRemaining))
+                    .font(.largeTitle)
+                    .fontWeight(.heavy)
+                    .onReceive(countdown) { _ in
+                        if timeRemaining > 0 {
+                            timeRemaining -= 1
+                        } else {
+                            self.endGame()
                         }
                     }
-                }
-            Spacer()
-                .frame(maxHeight: 20)
-        }
-        .padding()
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 25, style: .continuous))
-        .transition(.slideInFromBottom)
-        .animation(.spring())
-                   }
-
+                
+                AnimatedCheckmarkView(isAnimating: $shouldAnimateCheckmark)
+                Text(currentInfo.displayText)
+                TextField("Answer", text: $answer)
+                    .frame(width: 180	)
+                    .font(.headline)
+                    .fontWeight(.heavy)
+                    .modifier(jiggleEffect(animatableData: CGFloat(attempts)))
+                    .multilineTextAlignment(.center)
+                    .buttonStyle(.borderedProminent)
+                    .tint(buttonBackground)
+                    .onChange(of: answer) { newValue in
+                        if let userAnswer = Int(newValue),
+                           userAnswer == currentInfo.answer {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                AudioServicesPlaySystemSound(systemSoundID)
+                                shouldAnimateCheckmark = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                    shouldAnimateCheckmark = false
+                                }
+                                sessionScore += 1
+                                currentInfo = equationShuffle(termCount: Int(sliderValue))
+                                answer = ""
+                            }
+                        }
+                    }
+                Spacer()
+                    .frame(maxHeight: 20)
+            }
+            .padding()
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 25, style: .continuous))
+            .transition(.slideInFromBottom)
+            .animation(.spring())
+            }
     }
 }
 private struct MenuScreen: View{
@@ -265,17 +263,10 @@ private struct MenuScreen: View{
                         
                     }) {
                         HStack {
-//                            Image(systemName: "1.circle.fill")
-//                                .font(.title3)
                             Text("Easy")
-                            //                            .frame(maxWidth: 200, maxHeight: 30)
-                            //                            .fontWeight(.semibold)
                                 .font(.title3)
                         }
                         .frame(maxWidth: 80, maxHeight: 30)
-                       // .foregroundColor(buttonForeground)
-                       // .foregroundColor(sliderValue ? Color.blue : Color.yellow)
-                        
                     }
                     .foregroundColor(buttonForeground)
                     .buttonStyle(.borderedProminent)
@@ -284,11 +275,7 @@ private struct MenuScreen: View{
                         sliderValue = 3.0
                     }) {
                         HStack {
-//                            Image(systemName: "1.circle.fill")
-//                                .font(.title3)
                             Text("Normal")
-                            //                            .frame(maxWidth: 200, maxHeight: 30)
-                            //                            .fontWeight(.semibold)
                                 .font(.title3)
                         }
                         .frame(maxWidth: 80, maxHeight: 30)
@@ -301,11 +288,7 @@ private struct MenuScreen: View{
                         sliderValue = 4.0
                     }) {
                         HStack {
-//                            Image(systemName: "1.circle.fill")
-//                                .font(.title3)
                             Text("Hard")
-                            //                            .frame(maxWidth: 200, maxHeight: 30)
-                            //                            .fontWeight(.semibold)
                                 .font(.title3)
                         }
                         .frame(maxWidth: 80, maxHeight: 30)
@@ -369,6 +352,7 @@ struct Previews_TimedEquations_Previews: PreviewProvider {
         HomeScreen()
     }
 }
+
 struct HighScorePopup: View {
     @Binding var popupPresented: Bool
     @Binding var leaderboardNavigate: Bool
@@ -398,8 +382,6 @@ struct HighScorePopup: View {
                         Image(systemName: "checkmark.icloud.fill")
                            .font(.title3)
                         Text("Yes")
-//                            .frame(maxWidth: 200, maxHeight: 30)
-//                            .fontWeight(.semibold)
                             .font(.title3)
                     }
                     .frame(maxWidth: 320, maxHeight: 30)
@@ -416,8 +398,6 @@ struct HighScorePopup: View {
                         Image(systemName: "arrowshape.turn.up.backward.circle.fill")
                            .font(.title3)
                         Text("No")
-//                            .frame(maxWidth: 200, maxHeight: 30)
-//                            .fontWeight(.semibold)
                             .font(.title3)
                     }
                     .frame(maxWidth: 320, maxHeight: 30)
