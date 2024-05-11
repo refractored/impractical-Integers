@@ -47,13 +47,11 @@ struct InfiniteEquations: View {
                 }
                 .frame(width: 125, height: 5)
                 
-                //if infCorrectScore != -1{
                     Text("C/I Ratio:")
                     Text("\(converted)").font(.title2).fontWeight(.thin)
                     .onAppear(perform: {
                          converted = String(format: "%.1f", (Double(infCorrectScore) / Double(infIncorrectScore)))
                     })
-                //}
             }
             if equations {
                 Text(String(timeRemaining))
