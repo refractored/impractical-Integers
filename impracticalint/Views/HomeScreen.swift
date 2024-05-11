@@ -22,7 +22,6 @@ struct ImageOverlay: View{
                                 .font(.title2)
                                 .fontWeight(.heavy)
                                 .foregroundColor(.white)
-                            //                            .padding(6)
                                 .font(.callout)
                             Spacer()
                         }
@@ -31,7 +30,6 @@ struct ImageOverlay: View{
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.white)
-                            //                            .padding(6)
                                 .font(.callout)
                                 .multilineTextAlignment(.leading)
                                 .frame(alignment: .leading)
@@ -39,10 +37,7 @@ struct ImageOverlay: View{
                         }
                     }
                 }
-//                }.background(Color.black)
-//                    .opacity(0.8)
-//                    .cornerRadius(10.0)
-//                    .padding(6)
+
             }
         }
     }
@@ -51,7 +46,6 @@ struct ScoreOverlay: View{
     @AppStorage("correct") private var timedHighScore = -1
 
     var body: some View {
-//        HStack{
             VStack{
                 ZStack{
                     RoundedRectangle(cornerRadius: 30)

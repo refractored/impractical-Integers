@@ -37,14 +37,14 @@ struct TimedEquations: View {
         AudioServicesPlaySystemSound(startSoundEffect)
         equations = true
         sessionScore = 0
-        currentInfo = equationShuffle(termCount: Int(sliderValue))
+        currentInfo = generateEquation(termCount: Int(sliderValue))
         timeRemaining = 60
     }
     
     private func endGame(animated: Bool){
         answer = ""
         AudioServicesPlaySystemSound(endSoundEffect)
-        if animated{
+        if (animated){
             withAnimation(.none) {
                 equations = false
             }
@@ -183,7 +183,7 @@ private struct GameScreen: View{
                                     shouldAnimateCheckmark = false
                                 }
                                 sessionScore += 1
-                                currentInfo = equationShuffle(termCount: Int(sliderValue))
+                                currentInfo = generateEquation(termCount: Int(sliderValue))
                                 answer = ""
                             }
                         }

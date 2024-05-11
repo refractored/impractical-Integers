@@ -67,7 +67,7 @@ struct InfiniteEquations: View {
                             timeRemaining = timeConfig
                             print("\(infCorrectScore) / \(infIncorrectScore)")
                             ratioScore = Double(infCorrectScore) / Double(infIncorrectScore)
-                            currentInfo = equationShuffle(termCount: Int(sliderValue))
+                            currentInfo = generateEquation(termCount: Int(sliderValue))
                             
                             
                         }
@@ -81,7 +81,7 @@ struct InfiniteEquations: View {
                 Button("Submit"){
                     if answer == String(currentInfo.answer){
                         infCorrectScore += 1
-                        currentInfo = equationShuffle(termCount: Int(sliderValue))
+                        currentInfo = generateEquation(termCount: Int(sliderValue))
                         timeRemaining = timeConfig
                         answer = ""
                     } else {
@@ -103,7 +103,7 @@ struct InfiniteEquations: View {
                 } else {
                     equations = true
                     text = "End"
-                    currentInfo = equationShuffle(termCount: Int(sliderValue))
+                    currentInfo = generateEquation(termCount: Int(sliderValue))
                     timeRemaining = 10
             }
 //                if equations{
