@@ -105,19 +105,7 @@ struct InfiniteEquations: View {
                     text = "End"
                     currentInfo = generateEquation(termCount: Int(sliderValue))
                     timeRemaining = 10
-            }
-//                if equations{
-//                    equations = false
-//                    text = "Begin"
-//                } else {
-//                    equations = true
-//                    text = "End"
-//                }
-//                if equations{
-//                    currentInfo = equationShuffle(termCount: Int(sliderValue))
-//                    timeRemaining = 10
-//
-//                }
+                }
             }
             .foregroundColor(.white)
             .buttonStyle(.borderedProminent)
@@ -132,10 +120,6 @@ struct InfiniteEquations: View {
             
             
         }
-        //            Text("TBA")
-        //                .font(.largeTitle)
-        //            Text("Correct/Incorrect Ratio")
-        //                .font(.footnote)
     }
     
 }
