@@ -1,27 +1,32 @@
 //
-//  TimedGame.swift
+//  InfiniteGameView.swift
 //  impracticalint
 //
-//  Created by David on 5/11/24.
+//  Created by David on 5/20/24.
 //
 
+import Foundation
 import SwiftUI
 import AVFoundation
 
 
-struct GameScreen: View{
+struct InfiniteGameView: View{
     @Binding var shouldAnimateCheckmark: Bool
     @Binding var timeRemaining: Int
-    @Binding var timedHighScore: Int
+//    @Binding var timedHighScore: Int
     @Binding var answer: String
     @Binding var attempts: Int
-    @Binding var sessionScore: Int
-    @Binding var sliderValue: Float
+    @Binding var difficultyValue: Int
+//    @Binding var sessionScore: Int
     @Binding var currentInfo: equationInfo
+    @Binding var infCorrectScore: Int
+    @Binding var infIncorrectScore: Int
+    
+    @Environment(\.presentationMode) var presentationMode
+    
     private let countdown = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     var endGame: () -> Void
     let buttonBackground = Color("buttonBackground")
-    @Environment(\.presentationMode) var presentationMode
     let systemSoundID: SystemSoundID = 1407
     
     var body: some View{
@@ -38,7 +43,11 @@ struct GameScreen: View{
                         if timeRemaining > 0 {
                             timeRemaining -= 1
                         } else {
-                            self.endGame()
+                            timeRemaining = 5
+                            attempts += 1
+                            infIncorrectScore += 1
+                            currentInfo = generateEquation(termCount: difficultyValue)
+                            answer = ""
                         }
                     }
                 
@@ -61,9 +70,10 @@ struct GameScreen: View{
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                                     shouldAnimateCheckmark = false
                                 }
-                                sessionScore += 1
-                                currentInfo = generateEquation(termCount: Int(sliderValue))
+                                infCorrectScore += 1
+                                currentInfo = generateEquation(termCount: difficultyValue)
                                 answer = ""
+                                timeRemaining = 5
                             }
                         }
                     }

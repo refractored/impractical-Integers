@@ -1,18 +1,17 @@
 //
-//  TimedMenu.swift
+//  InfiniteMenuView.swift
 //  impracticalint
 //
-//  Created by David on 5/11/24.
+//  Created by David on 5/20/24.
 //
 
+import Foundation
 import SwiftUI
 
-struct MenuScreen: View{
-    @Binding var sliderValue: Float
-    @Binding var timedHighScore: Int
-    @AppStorage("easyHighScore") private var easyHighScore = -1
-    @AppStorage("normalHighScore") private var normalHighScore = -1
-    @AppStorage("hardHighScore") private var hardHighScore = -1
+struct InfiniteMenuView: View{
+    @Binding var difficultyValue: Int
+    @Binding var infCorrectScore: Int
+    @Binding var infIncorrectScore: Int
 
     var startGame: () -> Void
     let buttonBackground = Color("buttonBackground")
@@ -31,45 +30,24 @@ struct MenuScreen: View{
                 .frame(maxHeight: 30)
             VStack {
                 HStack{
-                    if easyHighScore != -1{
-                        VStack{
-                            Text("Easy")
-                                .font(.title3)
-                            Text("Top Score:")
-                                .font(.title3)
-                            Text("\(easyHighScore)").font(.title2).fontWeight(.thin)
-                                .onAppear(perform: {
-                                    print(normalHighScore)
-                                })
-                        }
-                    }
-                    if normalHighScore != -1{
-                        VStack{
-                            Text("Normal")
-                                .font(.title3)
-
-                            Text("Top Score:")
-                                .font(.title3)
-                            Text("\(normalHighScore)").font(.title2).fontWeight(.thin)
-                        }
-                    }
-                    if hardHighScore != -1{
-                        VStack{
-                            Text("Hard")
-                                .font(.title3)
-
-                            Text("Top Score:")
-                                .font(.title3)
-                            Text("\(hardHighScore)").font(.title2).fontWeight(.thin)
-                        }
-                    }
+//                    if infCorrectScore != -1{
+//                        VStack{
+//                            Text("Correct")
+//                                .font(.title3)
+//                            Text("Top Score:")
+//                                .font(.title3)
+//                            Text("\(easyHighScore)").font(.title2).fontWeight(.thin)
+//                                .onAppear(perform: {
+//                                    print(normalHighScore)
+//                                })
+//                        }
+//                    }
                 }
                 Spacer()
                     .frame(maxHeight: 30)
                 HStack{
                     Button(action:{
-                        sliderValue = 2.0
-                        
+                        difficultyValue = 2
                     }) {
                         HStack {
                             Text("Easy")
@@ -79,9 +57,10 @@ struct MenuScreen: View{
                     }
                     .foregroundColor(buttonForeground)
                     .buttonStyle(.borderedProminent)
-                    .tint(sliderValue == 2 ? Color("difficultySelector") : sliderValue != 2 ? Color("buttonBackground") : Color("buttonBackground"))
+                    .tint(difficultyValue == 2 ? Color("difficultySelector") : difficultyValue != 2 ? Color("buttonBackground") : Color("buttonBackground"))
+                    
                     Button(action:{
-                        sliderValue = 3.0
+                        difficultyValue = 3
                     }) {
                         HStack {
                             Text("Normal")
@@ -92,9 +71,10 @@ struct MenuScreen: View{
                     }
                     .foregroundColor(buttonForeground)
                     .buttonStyle(.borderedProminent)
-                    .tint(sliderValue == 3 ? Color("difficultySelector") : sliderValue != 3 ? Color("buttonBackground") : Color("buttonBackground"))
+                    .tint(difficultyValue == 3 ? Color("difficultySelector") : difficultyValue != 3 ? Color("buttonBackground") : Color("buttonBackground"))
+                    
                     Button(action:{
-                        sliderValue = 4.0
+                        difficultyValue = 4
                     }) {
                         HStack {
                             Text("Hard")
@@ -105,7 +85,7 @@ struct MenuScreen: View{
                     }
                     .foregroundColor(buttonForeground)
                     .buttonStyle(.borderedProminent)
-                    .tint(sliderValue == 4 ? Color("difficultySelector") : Color("buttonBackground"))
+                    .tint(difficultyValue == 4 ? Color("difficultySelector") : Color("buttonBackground"))
                 }
                 
             }

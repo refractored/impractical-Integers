@@ -108,7 +108,6 @@ struct HomeScreen: View {
                     .frame(maxWidth: 320, maxHeight: 30)
 
                 }
-                
                 .foregroundColor(buttonForeground)
                 .buttonStyle(.borderedProminent)
                 .tint(buttonBackground)

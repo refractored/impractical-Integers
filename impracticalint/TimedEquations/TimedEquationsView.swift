@@ -85,14 +85,14 @@ struct TimedEquations: View {
                 .ignoresSafeArea()
             VStack {
                 if !equations{
-                    MenuScreen(
+                    TimedMenuView(
                         sliderValue: $sliderValue,
                         timedHighScore: $easyHighScore,
                         startGame: {
                             self.startGame()
                         })
                 }else{
-                    GameScreen(
+                    TimedGameView(
                         shouldAnimateCheckmark: $shouldAnimateCheckmark,
                         timeRemaining: $timeRemaining,
                         timedHighScore: $easyHighScore,
